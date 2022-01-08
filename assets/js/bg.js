@@ -3,7 +3,14 @@ const canvas = document.getElementById("canvas");
 
 window.addEventListener("resize", resizeCanvas, false);
 
-let points = generatePoints(150);
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let points = generatePoints(100);
+
+let globalRadius = 0;
+
+let debugKeyPressed = false;
 
 resizeCanvas();
 
@@ -36,6 +43,19 @@ let globalAccel = {
     y: 0,
 };
 
+//detect if control is pressed
+window.addEventListener("keydown", (e) => {
+    if (e.key == "Control") {
+        debugKeyPressed = true;
+    }
+});
+
+window.addEventListener("keyup", (e) => {
+    if (e.key == "Control") {
+        debugKeyPressed = false;
+    }
+});
+
 canvas.addEventListener("mousemove", (e) => {
     lastMouse.x = mouse.x;
     lastMouse.y = mouse.y;
@@ -59,7 +79,10 @@ setInterval(() => checkMouseAccel(), 100);
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    randomizePoints();
+
+    globalRadius = Math.round((canvas.width * canvas.height) / 10000);
+
+    points = generatePoints(globalRadius);
 }
 
 function checkMouseAccel() {
@@ -84,6 +107,8 @@ function render() {
     ctx.strokeStyle = "#fff";
 
     ctx.font = "30px Arial";
+
+    ctx.fillText(debugKeyPressed ? `${calcDotsCurrentlyOnScreen()}/${globalRadius}` : "", 10, 30);
 }
 
 function generatePoints(n) {
@@ -97,13 +122,6 @@ function generatePoints(n) {
         });
     }
     return points;
-}
-
-function randomizePoints() {
-    points.forEach((point) => {
-        point.x = Math.random() * canvas.width;
-        point.y = Math.random() * canvas.height;
-    });
 }
 
 /**
@@ -128,25 +146,30 @@ function processPoints() {
     globalAccel.x *= 0.95;
     globalAccel.y *= 0.95;
 
+    let radius = bound(Math.abs(globalAccel.x + globalAccel.y) * (globalRadius / 10), globalRadius / 3, globalRadius)
+
     points.forEach((point) => {
-        if (point.x > canvas.width) {
+        if (point.x > canvas.width + radius) {
             point.x = 0;
         }
 
-        if (point.x < 0) {
+        if (point.x < 0 - radius) {
             point.x = canvas.width;
         }
 
-        if (point.y > canvas.height) {
+        if (point.y > canvas.height + radius) {
             point.y = 0;
         }
 
-        if (point.y < 0) {
+        if (point.y < 0 - radius) {
             point.y = canvas.height;
         }
 
-        point.vx += globalAccel.x / 1000;
-        point.vy += globalAccel.y / 1000;
+        point.vx += modify(globalAccel.x / 1000, 0.1)
+        point.vy += modify(globalAccel.y / 1000, 0.1)
+
+        point.vy = roughBound(point.vy, -1.5, 1.5);
+        point.vx = roughBound(point.vx, -1.5, 1.5);
 
         point.x += point.vx + globalAccel.x;
         point.y += point.vy + globalAccel.y;
@@ -155,7 +178,7 @@ function processPoints() {
 
 function drawLines(ctx) {
     points.forEach((point) => {
-        let pointsInRadius = getPointsInRadius(Math.abs(globalAccel.x + globalAccel.y) * 15, points, point);
+        let pointsInRadius = getPointsInRadius(bound(Math.abs(globalAccel.x + globalAccel.y) * 15, 50, 150), points, point);
         pointsInRadius.forEach((point2) => {
             drawLine(ctx, point, point2);
         });
@@ -175,6 +198,13 @@ function getDistanceBeteenPoints(point1, point2) {
     return Math.sqrt(x * x + y * y);
 }
 
+function getDistanceFromMouse(point) {
+
+    let x = point.x - mouse.x;
+    let y = point.y - mouse.y;
+    return Math.sqrt(x * x + y * y);
+}
+
 function getPointsInRadius(radius, points, point) {
 
     let pointsInRadius = [];
@@ -187,4 +217,44 @@ function getPointsInRadius(radius, points, point) {
 
     return pointsInRadius;
 
+}
+
+function bound(value, min, max) {
+    return Math.max(Math.min(value, max), min);
+}
+
+function roughBound(value, min, max) {
+
+    //if the value is within the min and max, return it
+
+    if (value > min && value < max) {
+        return value;
+    }
+
+    //if the value is below the min, change it relative to the distance from the min
+
+    if (value < min) {
+        return min - (min - value) / 2;
+    }
+
+    //if the value is above the max, change it relative to the distance from the max
+
+    if (value > max) {
+        return max + (value - max) / 2;
+    }
+
+}
+
+function modify(value, modifier) {
+    return value * (Math.random() * modifier);
+}
+
+function calcDotsCurrentlyOnScreen() {
+    let dotsOnScreen = 0;
+    points.forEach((point) => {
+        if (point.x > 0 && point.x < canvas.width && point.y > 0 && point.y < canvas.height) {
+            dotsOnScreen++;
+        }
+    });
+    return dotsOnScreen;
 }
