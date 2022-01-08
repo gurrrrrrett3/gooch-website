@@ -3,7 +3,7 @@ const canvas = document.getElementById("canvas");
 
 window.addEventListener("resize", resizeCanvas, false);
 
-let points = generatePoints(300);
+let points = generatePoints(150);
 
 resizeCanvas();
 
@@ -45,15 +45,15 @@ canvas.addEventListener("mousemove", (e) => {
     mouseDown = e.buttons.toString(2).charAt(0) == 1;
 
     if (mouseDown) {
-        mouseAccel.x = (mouse.x - lastMouse.x) * 3;
-        mouseAccel.y = (mouse.y - lastMouse.y) * 3;
+        mouseAccel.x = (mouse.x - lastMouse.x) * 2;
+        mouseAccel.y = (mouse.y - lastMouse.y) * 2;
     } else {
         mouseAccel.x = mouse.x - lastMouse.x;
         mouseAccel.y = mouse.y - lastMouse.y;
     }
 });
 
-setInterval(() => render(), 1000 / 60);
+setInterval(() => render(), 1000 / 45);
 setInterval(() => checkMouseAccel(), 100);
 
 function resizeCanvas() {
