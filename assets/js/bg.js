@@ -7,10 +7,10 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let points = generatePoints(100);
-
 let globalRadius = 0;
-
 let debugKeyPressed = false;
+
+let altHue = 0
 
 resizeCanvas();
 
@@ -99,16 +99,22 @@ function render() {
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    altHue += 1;
+
     processPoints();
-    renderPoints(ctx);
     drawLines(ctx);
+    renderPoints(ctx);
 
     ctx.fillStyle = "#fff";
     ctx.strokeStyle = "#fff";
 
     ctx.font = "30px Arial";
 
-    ctx.fillText(debugKeyPressed ? `${calcDotsCurrentlyOnScreen()}/${globalRadius}` : "", 10, 30);
+    let radius = Math.round(
+        bound(Math.abs(globalAccel.x + globalAccel.y) * (globalRadius / 10), globalRadius / 3, globalRadius)
+    );
+
+    ctx.fillText(debugKeyPressed ? `${calcDotsCurrentlyOnScreen()}/${globalRadius} | ${radius} | ${altColor.toString(16)}` : "", 10, 30);
 }
 
 function generatePoints(n) {
@@ -119,6 +125,7 @@ function generatePoints(n) {
             y: Math.random() * canvas.height,
             vx: Math.random() * 2 - 1,
             vy: Math.random() * 2 - 1,
+            color: "#fff",
         });
     }
     return points;
@@ -130,7 +137,7 @@ function generatePoints(n) {
  */
 function renderPoints(ctx) {
     points.forEach((point) => {
-        ctx.fillStyle = "#fff";
+        ctx.fillStyle = point.color;
         ctx.beginPath();
         ctx.arc(point.x, point.y, 2, 0, Math.PI * 2);
         ctx.fill();
@@ -146,7 +153,11 @@ function processPoints() {
     globalAccel.x *= 0.95;
     globalAccel.y *= 0.95;
 
-    let radius = bound(Math.abs(globalAccel.x + globalAccel.y) * (globalRadius / 10), globalRadius / 3, globalRadius)
+    let radius = bound(
+        Math.abs(globalAccel.x + globalAccel.y) * (globalRadius / 10),
+        globalRadius / 3,
+        globalRadius
+    );
 
     points.forEach((point) => {
         if (point.x > canvas.width + radius) {
@@ -165,8 +176,8 @@ function processPoints() {
             point.y = canvas.height;
         }
 
-        point.vx += modify(globalAccel.x / 1000, 0.1)
-        point.vy += modify(globalAccel.y / 1000, 0.1)
+        point.vx += modify(globalAccel.x / 1000, 0.1);
+        point.vy += modify(globalAccel.y / 1000, 0.1);
 
         point.vy = roughBound(point.vy, -1.5, 1.5);
         point.vx = roughBound(point.vx, -1.5, 1.5);
@@ -178,7 +189,18 @@ function processPoints() {
 
 function drawLines(ctx) {
     points.forEach((point) => {
-        let pointsInRadius = getPointsInRadius(bound(Math.abs(globalAccel.x + globalAccel.y) * 15, 50, 150), points, point);
+        let pointsInRadius = getPointsInRadius(
+            bound(Math.abs(globalAccel.x + globalAccel.y) * 15, 50, 150),
+            points,
+            point
+        );
+
+        if (pointsInRadius.length > 1) {
+            point.color = `hsl(${Math.round(altHue)}, 100%, 50%)`
+        } else {
+            point.color = "#fff";
+            return;
+        }
         pointsInRadius.forEach((point2) => {
             drawLine(ctx, point, point2);
         });
@@ -186,6 +208,7 @@ function drawLines(ctx) {
 }
 
 function drawLine(ctx, point1, point2) {
+    ctx.strokeStyle = point1.color;
     ctx.beginPath();
     ctx.moveTo(point1.x, point1.y);
     ctx.lineTo(point2.x, point2.y);
@@ -199,14 +222,12 @@ function getDistanceBeteenPoints(point1, point2) {
 }
 
 function getDistanceFromMouse(point) {
-
     let x = point.x - mouse.x;
     let y = point.y - mouse.y;
     return Math.sqrt(x * x + y * y);
 }
 
 function getPointsInRadius(radius, points, point) {
-
     let pointsInRadius = [];
 
     points.forEach((point1) => {
@@ -216,7 +237,6 @@ function getPointsInRadius(radius, points, point) {
     });
 
     return pointsInRadius;
-
 }
 
 function bound(value, min, max) {
@@ -224,25 +244,15 @@ function bound(value, min, max) {
 }
 
 function roughBound(value, min, max) {
-
-    //if the value is within the min and max, return it
-
     if (value > min && value < max) {
         return value;
     }
-
-    //if the value is below the min, change it relative to the distance from the min
-
     if (value < min) {
         return min - (min - value) / 2;
     }
-
-    //if the value is above the max, change it relative to the distance from the max
-
     if (value > max) {
         return max + (value - max) / 2;
     }
-
 }
 
 function modify(value, modifier) {
