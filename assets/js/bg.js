@@ -56,7 +56,7 @@ window.addEventListener("keyup", (e) => {
     }
 });
 
-canvas.addEventListener("mousemove", (e) => {
+window.addEventListener("mousemove", (e) => {
     lastMouse.x = mouse.x;
     lastMouse.y = mouse.y;
     mouse.x = e.clientX;
