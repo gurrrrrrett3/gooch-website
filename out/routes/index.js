@@ -11,4 +11,7 @@ router.use("/assets", assets_1.default);
 router.get("/", (req, res) => {
     res.sendFile(path_1.default.resolve("./assets/html/index.html"));
 });
+router.get("/appeal", (req, res) => {
+    res.sendFile(path_1.default.resolve("./assets/html/appeal.html"));
+});
 exports.default = router;
