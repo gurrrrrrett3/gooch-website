@@ -14,11 +14,11 @@ const countdown = setInterval(() => {
     const seconds = f(Math.floor((diff % (1000 * 60)) / 1000));
     const milliseconds = f2(Math.floor((diff % (1000 * 60)) / 10)).substr(2);
 
-    countdownObject.innerHTML = diff > 0 ? `${days}d ${hours}h ${minutes}m ${seconds}s ${milliseconds}ms` : '0d 0h 0m 0s 0ms';
+    countdownObject.innerHTML = `${days}:${hours}:${minutes}:${seconds}.${milliseconds}`;
 
     if (diff < 0) {
         clearInterval(countdown);
-        countdownObject.innerHTML = '0d 0h 0m 0s 0ms';
+        countdownObject.innerHTML = 'Now.';
         countdownObject.style.color = 'red';
     }
 }, 10);
