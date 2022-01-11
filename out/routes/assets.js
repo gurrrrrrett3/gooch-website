@@ -12,6 +12,12 @@ router.get("/local/:type/:name", (req, res) => {
     let name = req.params.name;
     res.sendFile(path_1.default.resolve(`./assets/${type}/${name}.${type}`));
 });
+router.get("/local/:group/:type/:name", (req, res) => {
+    let group = req.params.group;
+    let type = req.params.type;
+    let name = req.params.name;
+    res.sendFile(path_1.default.resolve(`./assets/groups/${group}/${type}/${name}.${type}`));
+});
 router.get("/remote/:type/:name", (req, res) => {
     let type = req.params.type;
     let name = req.params.name;
