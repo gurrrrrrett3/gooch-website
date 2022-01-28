@@ -13,8 +13,8 @@ router.get("/", (req, res) => {
     res.sendFile(path.resolve("./assets/html/index.html"));
 })
 
-router.get("/appeal", (req, res) => {
-    res.sendFile(path.resolve("./assets/html/appeal.html"));
+router.get("/skyblock", (req, res) => {
+    res.sendFile(path.resolve("./assets/html/skyblock.html"));
 })
 
 export default router;

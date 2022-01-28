@@ -1,6 +1,6 @@
 const countdownObject = document.getElementById('countdown');
 
-const until = 1641965040000
+const until = 1643500840000
 
 const countdown = setInterval(() => {
     let now = Date.now()
