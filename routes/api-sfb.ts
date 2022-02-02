@@ -31,11 +31,7 @@ router.post("/upload", upload.single("file"),(req, res) => {
             return
         }
 
-        res.send({
-            success: true,
-            message: "File uploaded",
-            code: code
-        });
+        res.setHeader("Set-Cookie", `code=${code}; Path=/`).redirect("/sfb/upload");
 
         FileManager.manageUpload(code, {
             username: req.body.username,

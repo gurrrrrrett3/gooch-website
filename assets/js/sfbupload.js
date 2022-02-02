@@ -2,6 +2,21 @@ const itemSearch = document.getElementById('itemName');
 const itemSearchButton = document.getElementById('search-submit');
 const itemNameResult = document.getElementById('item-name-result');
 
+const cookie = document.cookie;
+const cookieArray = cookie.split(';');
+let cookieObject = {};
+cookieArray.forEach(cookie => {
+    const valueArray = cookie.split('=');
+    cookieObject[valueArray[0]] = valueArray[1];
+});
+
+console.log(cookieObject);
+
+if (cookieObject.code) {
+    alert(`Success! Image code: ${cookieObject.code}`)
+    document.cookie = `code=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+}
+
 (
     async() => {
 
