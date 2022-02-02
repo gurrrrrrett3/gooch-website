@@ -7,9 +7,7 @@ export default class Util {
         for (let i = 0; i < 6; i++) {
             code += String.fromCharCode(Math.floor(Math.random() * 26) + 65);
         }
-
         return code;
-
     }
 
 }
