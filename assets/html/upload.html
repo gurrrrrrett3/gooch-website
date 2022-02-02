@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/assets/local/css/vapor" />
+    <link rel="stylesheet" href="/assets/local/css/util" />
+
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="gooch.dev | sfb upload" />
+    <meta name="description" content="SFB upload page" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://gooch.dev/" />
+    <meta property="twitter:title" content="gooch.dev | sfb upload" />
+    <meta property="twitter:description" content="SFB upload page" />
+
+    <title>gooch.dev | SHB upload page</title>
+</head>
+
+<body style="width: 100vw; height: 100vh;">
+
+    <h1 class="ch top-10px">SlimefunBeutified Upload page</h1>
+    <form>
+        <input type="text" id="itemName" placeholder="Search..." class="form-control form-control-lg wide ch top-20pc" autocomplete="off" />
+        <input type="submit" id="search-submit" hidden />
+    </form>
+
+
+    <div id="resultsList" class="results wide left-10pc top-30pc abs"></div>
+
+    <div class="btm-10px abs ch">
+        <form action="/api/sfb/upload" method="post" enctype="multipart/form-data">
+            <fieldset disabled="">
+                <input class="form-control" id="item-name-result" type="text" name="item" disabled="" value="No item Selected">
+            </fieldset>
+            <input type="file" name="file" class="btn btn-lg btn-secondary" />
+            <input type="submit" value="Upload" class="btn btn-lg btn-primary" />
+        </form>
+
+        <script src="/assets/local/js/header"></script>
+        <script src="/assets/local/js/fuzzyset"></script>
+        <script src="/assets/local/js/sfbupload"></script>
+</body>
+
+</html>

@@ -1,0 +1,41 @@
+.ch {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+.top-10px {
+    top: 10px;
+}
+
+.top-20pc {
+    top: 20%;
+}
+
+.top-30pc {
+    top: 30%;
+}
+
+.btm-10px {
+    bottom: 10px;
+}
+
+.left-10pc {
+    left: 10%;
+}
+
+.abs {
+    position: absolute;
+}
+
+.wide {
+    width: 90%;
+}
+
+.results {
+    list-style: none;
+}
+
+.results li:first-child {
+    color: lime;
+}
