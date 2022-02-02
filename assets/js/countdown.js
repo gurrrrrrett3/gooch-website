@@ -1,6 +1,6 @@
 const countdownObject = document.getElementById('countdown');
 
-const until = 1643500840000
+const until = 1644004800000
 
 const countdown = setInterval(() => {
     let now = Date.now()
@@ -14,7 +14,7 @@ const countdown = setInterval(() => {
     const seconds = f(Math.floor((diff % (1000 * 60)) / 1000));
     const milliseconds = f2(Math.floor((diff % (1000 * 60)) / 10)).substr(2);
 
-    countdownObject.innerHTML = `${days}:${hours}:${minutes}:${seconds}.${milliseconds}`;
+    countdownObject.innerHTML = `in ${days}:${hours}:${minutes}:${seconds}.${milliseconds}`;
 
     if (diff < 0) {
         clearInterval(countdown);
