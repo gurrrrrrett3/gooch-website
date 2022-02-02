@@ -31,6 +31,7 @@ canvas {
 
 h2 {
     color: #fff;
+    font-family: Montserrat, Helvetica, Arial, sans-serif;
 }
 
 @media only screen and (max-width: 600px) {
