@@ -39,4 +39,12 @@ router.post("/upload", upload.single("file"), (req, res) => {
         console.log(req.body);
     });
 });
+router.post("/bot/upload", (req, res) => {
+    console.log(req.body);
+    res.send({
+        success: true,
+        message: "Uploaded",
+        code: util_1.default.genCode()
+    });
+});
 exports.default = router;
