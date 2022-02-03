@@ -41,10 +41,12 @@ router.post("/upload", upload.single("file"), (req, res) => {
 });
 router.post("/bot/upload", (req, res) => {
     console.log(req.body);
-    res.send({
-        success: true,
-        message: "Uploaded",
-        code: util_1.default.genCode()
+    const code = util_1.default.genCode();
+    const data = fileManager_1.default.manageBotUpload(code, {
+        id: req.body.user,
+        itemName: req.body.item,
+        url: req.body.texture
     });
+    res.send(data);
 });
 exports.default = router;

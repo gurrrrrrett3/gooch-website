@@ -37,7 +37,7 @@ router.post("/upload", upload.single("file"),(req, res) => {
             username: req.body.username,
             itemName: req.body.item,
             ip: req.ip
-        });
+        })
 
         console.log(req.body)
     });
@@ -47,11 +47,15 @@ router.post("/bot/upload", (req, res) => {
 
     console.log(req.body)
 
-    res.send({
-        success: true,
-        message: "Uploaded",
-        code: Util.genCode()
-    });
+    const code = Util.genCode();
+
+    const data = FileManager.manageBotUpload(code, {
+        id: req.body.user,
+        itemName: req.body.item,
+        url: req.body.texture
+    })
+
+    res.send(data);
 })
 
 export default router;

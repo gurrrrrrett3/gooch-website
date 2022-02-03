@@ -3,10 +3,12 @@ import path from "path";
 import fs from "fs";
 
 import sfbRouter from "./api-sfb";
+import authRouter from "./auth";
 
 const router = Router();
 
 router.use("/sfb", sfbRouter);
+router.use("/auth", authRouter);
 
 router.get("/img/:code", (req, res) => {
     const filePath = path.resolve(`./data/images/${req.params.code.toUpperCase()}.png`)

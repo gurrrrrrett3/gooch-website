@@ -1,0 +1,21 @@
+{
+    "UI": [
+        "SLIMEFUN_GUIDE",
+        "_UI_BACKGROUND",
+        "_UI_NO_PERMISSION",
+        "_UI_NOT_RESEARCHED",
+        "_UI_INPUT_SLOT",
+        "_UI_OUTPUT_SLOT",
+        "_UI_BACK",
+        "_UI_MENU",
+        "_UI_SEARCH",
+        "_UI_WIKI",
+        "_UI_PREVIOUS_ACTIVE",
+        "_UI_PREVIOUS_INACTIVE",
+        "_UI_NEXT_ACTIVE",
+        "_UI_NEXT_INACTIVE"
+    ],
+    "MATERIALS": [
+
+    ]
+}
