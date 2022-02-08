@@ -22,7 +22,8 @@ router.get("/skyblock", (req, res) => {
 })
 
 router.get("/appeal", (req, res) => {
-    res.redirect("/assets/local/mp3/connection")
+    res.sendFile(path.resolve("./assets/html/appeal.html"));
+    //res.redirect("/assets/local/mp3/connection")
 })
 
 export default router;
