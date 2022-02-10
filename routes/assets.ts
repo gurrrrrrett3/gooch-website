@@ -13,6 +13,15 @@ router.get("/local/:type/:name", (req, res) => {
 
 })
 
+router.get("/local/font/:type/:name", (req, res) => {
+
+    let type = req.params.type == "1" ? "" : "2";
+    let name = req.params.name;
+
+    res.sendFile(path.resolve(`./assets/font/${req.params.type}/${name}.woff${type}`));
+
+})
+
 router.get("/local/:group/:type/:name", (req, res) => {
 
     let group = req.params.group;

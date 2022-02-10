@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/local/ampm/css/bootsrap">
+    <link rel="stylesheet" href="/assets/local/ampm/css/index">
+    <title>AmPm2 Image Creator</title>
+</head>
+
+<body style="background-color: #222;">
+
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">AM-PM Creations Too! Image Editor</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Home
+                <span class="visually-hidden">(current)</span>
+              </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Bath Mitt Circle</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    </nav>
+
+    <div class="main" style="width: 100%; height: 100%;">
+
+        <canvas id="preview"></canvas>
+
+        <div class="inputs" style="width: 20%; height: auto; position: absolute; bottom: 10%; left: 10px;">
+            <div class="form-group">
+                <label class="form-label mt-4">Color Number</label>
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">#</span>
+                        <input type="number" class="form-control" id="number" style="width: 64px;" placeholder="25" autocomplete="off">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">pt</span>
+                        <input type="number" class="form-control" id="font-size" style="width: 64px;" placeholder="24" autocomplete="off" value="64">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-form-label mt-4" for="inputDefault">Color Name</label>
+                <input type="text" class="form-control" placeholder="Ruby Red" id="name" autocomplete="off">
+            </div>
+
+            <div class="d-grid gap-2">
+                <button class="btn btn-lg btn-primary" type="button" id="save">Save</button>
+
+            </div>
+
+
+        </div>
+
+        <a id="link"></a>
+
+        <script src="/assets/local/ampm/js/mitt"></script>
+
+</body>
+
+</html>

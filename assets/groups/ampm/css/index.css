@@ -1,0 +1,6 @@
+@font-face {
+    font-family: 'tech';
+    src: url('/assets/local/font/2/technical') format('woff2'), url('/assets/local/font/1/technical') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
