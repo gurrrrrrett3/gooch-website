@@ -6,10 +6,10 @@ const lists = {
 };
 
 async function getData() {
-    const online = await (await fetch("http://localhost:3000/api/mm/onlinelist")).json();
-    const playtime = await (await fetch("http://localhost:3000/api/mm/lb/playtime")).json();
-    const mobkills = await (await fetch("http://localhost:3000/api/mm/lb/mobkills")).json();
-    const playerkills = await (await fetch("http://localhost:3000/api/mm/lb/kills")).json();
+    const online = await (await fetch("/api/mm/onlinelist")).json();
+    const playtime = await (await fetch("/api/mm/lb/playtime")).json();
+    const mobkills = await (await fetch("/api/mm/lb/mobkills")).json();
+    const playerkills = await (await fetch("/api/mm/lb/kills")).json();
 
     createList(lists.players, online);
 
