@@ -6,30 +6,35 @@ const lists = {
 };
 
 async function getData() {
-    const online = await (await fetch("/api/mm/onlinelist")).json();
-    const playtime = await (await fetch("/api/mm/lb/playtime")).json();
-    const mobkills = await (await fetch("/api/mm/lb/mobkills")).json();
-    const playerkills = await (await fetch("/api/mm/lb/kills")).json();
-
-    createList(lists.players, online);
-
-    let playtimeList = [];
-    playtime.forEach(function(item) {
-        playtimeList.push(`${item.name} | ${item.f_playtime}`);
+    (await fetch("/api/mm/onlinelist")).json().then((online) => {
+        createList(lists.players, online);
     });
-    createList(lists.playtime, playtimeList);
 
-    let mobkillsList = [];
-    mobkills.forEach(function(item) {
-        mobkillsList.push(`${item.name} | ${formatNumber(item.mobKills)}`);
+    (await fetch("/api/mm/lb/playtime")).json().then((playtime) => {
+        let playtimeList = [];
+        playtime.forEach(function(item) {
+            playtimeList.push(`${item.name} | ${item.f_playtime}`);
+        });
+        createList(lists.playtime, playtimeList);
     });
-    createList(lists.mobkills, mobkillsList);
 
-    let playerkillsList = [];
-    playerkills.forEach(function(item) {
-        playerkillsList.push(`${item.name} | ${formatNumber(item.playerKills)}`);
+    (await fetch("/api/mm/lb/mobkills")).json().then((mobkills) => {
+        let mobkillsList = [];
+        mobkills.forEach(function(item) {
+            mobkillsList.push(`${item.name} | ${formatNumber(item.mobKills)}`);
+        });
+        createList(lists.mobkills, mobkillsList);
     });
-    createList(lists.playerkills, playerkillsList);
+
+    (await fetch("/api/mm/lb/kills")).json().then((playerkills) => {
+        let playerkillsList = [];
+        playerkills.forEach(function(item) {
+            playerkillsList.push(`${item.name} | ${formatNumber(item.playerKills)}`);
+        });
+        createList(lists.playerkills, playerkillsList);
+    });
+
+
 }
 
 function createList(element, data) {
