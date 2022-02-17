@@ -9,11 +9,13 @@ const assets_1 = __importDefault(require("./assets"));
 const plethora_1 = __importDefault(require("./plethora"));
 const sfb_1 = __importDefault(require("./sfb"));
 const api_1 = __importDefault(require("./api"));
+const user_1 = __importDefault(require("./user"));
 let router = (0, express_1.Router)();
 router.use("/assets", assets_1.default);
 router.use("/plethora", plethora_1.default);
 router.use("/sfb", sfb_1.default);
 router.use("/api", api_1.default);
+router.use("/user", user_1.default);
 router.get("/", (req, res) => {
     res.sendFile(path_1.default.resolve("./assets/html/index.html"));
 });

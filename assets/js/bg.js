@@ -114,7 +114,7 @@ function render() {
         bound(Math.abs(globalAccel.x + globalAccel.y) * (globalRadius / 10), globalRadius / 3, globalRadius)
     );
 
-    ctx.fillText(debugKeyPressed ? `${calcDotsCurrentlyOnScreen()}/${globalRadius} | ${radius} | ${altColor.toString(16)}` : "", 10, 30);
+    ctx.fillText(debugKeyPressed ? `${calcDotsCurrentlyOnScreen()}/${globalRadius} | ${radius}` : "", 10, 30);
 }
 
 function generatePoints(n) {

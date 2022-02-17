@@ -5,6 +5,7 @@ import assetRouter from './assets';
 import plethoraRouter from './plethora';
 import sfbRouter from './sfb'
 import apiRouter from './api';
+import userRouter from './user';
 
 let router = Router();
 
@@ -12,6 +13,7 @@ router.use("/assets", assetRouter);
 router.use("/plethora", plethoraRouter);
 router.use("/sfb", sfbRouter);
 router.use("/api", apiRouter);
+router.use("/user", userRouter);
 
 router.get("/", (req, res) => {
     res.sendFile(path.resolve("./assets/html/index.html"));

@@ -13,3 +13,8 @@ export interface SFBUser {
     scope: string,
     token_type: string
 }
+
+export interface PageBuilderData {
+    [key: string]: string;
+}
+

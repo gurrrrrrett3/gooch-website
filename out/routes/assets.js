@@ -10,7 +10,12 @@ let router = (0, express_1.Router)();
 router.get("/local/:type/:name", (req, res) => {
     let type = req.params.type;
     let name = req.params.name;
-    res.sendFile(path_1.default.resolve(`./assets/${type}/${name}.${type}`));
+    if (name.includes(".css.map")) {
+        res.sendFile(path_1.default.resolve(`./assets/map/${name}`));
+    }
+    else {
+        res.sendFile(path_1.default.resolve(`./assets/${type}/${name}.${type}`));
+    }
 });
 router.get("/local/font/:type/:name", (req, res) => {
     let type = req.params.type == "1" ? "" : "2";

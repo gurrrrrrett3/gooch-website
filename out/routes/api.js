@@ -8,9 +8,11 @@ const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const api_sfb_1 = __importDefault(require("./api-sfb"));
 const auth_1 = __importDefault(require("./auth"));
+const api_mm_1 = __importDefault(require("./mm/api-mm"));
 const router = (0, express_1.Router)();
 router.use("/sfb", api_sfb_1.default);
 router.use("/auth", auth_1.default);
+router.use("/mm", api_mm_1.default);
 router.get("/img/:code", (req, res) => {
     const filePath = path_1.default.resolve(`./data/images/${req.params.code.toUpperCase()}.png`);
     if (fs_1.default.existsSync(filePath)) {
