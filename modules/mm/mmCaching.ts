@@ -21,11 +21,10 @@ export default class mmCaching {
     this.checkForCacheFiles();
     this.checkForCacheData();
     this.Cache();
-    this.timer = setInterval(this.Cache, 5000 * 60);
+    this.timer = setInterval(function() {}, 5000 * 60);
   }
 
   public async Cache() {
-    if (this.checkCacheTimestamp() < this.TIME_BETWEEN_CACHE_UPDATES) return;
     this.updateCacheTimestamp();    
     await this.cachePlayers();
     this.saveReport();
@@ -57,7 +56,7 @@ export default class mmCaching {
    
   }
 
-  private checkCacheTimestamp() {
+  public checkCacheTimestamp() {
     const data = this.getCacheData();
     return Date.now() - data.timestamp;
   }

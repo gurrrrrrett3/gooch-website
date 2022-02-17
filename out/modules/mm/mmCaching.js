@@ -29,12 +29,10 @@ class mmCaching {
         this.checkForCacheFiles();
         this.checkForCacheData();
         this.Cache();
-        this.timer = setInterval(this.Cache, 5000 * 60);
+        this.timer = setInterval(function () { }, 5000 * 60);
     }
     Cache() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.checkCacheTimestamp() < this.TIME_BETWEEN_CACHE_UPDATES)
-                return;
             this.updateCacheTimestamp();
             yield this.cachePlayers();
             this.saveReport();
