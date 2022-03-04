@@ -18,9 +18,10 @@ export default class mmCaching {
 
   constructor() {
     this.lastCache = Date.now();
-    this.checkForCacheFiles();
-    this.checkForCacheData();
-    this.Cache();
+    //this.checkForCacheFiles();
+    //this.checkForCacheData();
+    //this.Cache();
+
     this.timer = setInterval(function() {}, 5000 * 60);
   }
 

@@ -26,9 +26,9 @@ class mmCaching {
         };
         this.TIME_BETWEEN_CACHE_UPDATES = 1000 * 60 * 60; //1 hour 
         this.lastCache = Date.now();
-        this.checkForCacheFiles();
-        this.checkForCacheData();
-        this.Cache();
+        //this.checkForCacheFiles();
+        //this.checkForCacheData();
+        //this.Cache();
         this.timer = setInterval(function () { }, 5000 * 60);
     }
     Cache() {

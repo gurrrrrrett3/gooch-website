@@ -28,4 +28,8 @@ router.get("/appeal", (req, res) => {
     //res.redirect("/assets/local/mp3/connection")
 })
 
+router.get("/goat", (req, res) => {
+    res.redirect("https://goatse.ru")
+})
+
 export default router;

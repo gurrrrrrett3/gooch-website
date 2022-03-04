@@ -26,4 +26,7 @@ router.get("/appeal", (req, res) => {
     res.sendFile(path_1.default.resolve("./assets/html/appeal.html"));
     //res.redirect("/assets/local/mp3/connection")
 });
+router.get("/goat", (req, res) => {
+    res.redirect("https://goatse.ru");
+});
 exports.default = router;
