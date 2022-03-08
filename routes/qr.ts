@@ -96,7 +96,9 @@ const list: string[] = [
   //Other shit I add
 
   "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-  "https://gooch.dev/"
+  "https://gooch.dev/",
+  "https://nohello.net/en/",
+  "https://dontasktoask.com/"
 
 ];
 
