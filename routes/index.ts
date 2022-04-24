@@ -34,4 +34,9 @@ router.get("/goat", (req, res) => {
   res.redirect("https://goatse.ru");
 });
 
+
+router.get("/policy", (req, res) => {
+  res.sendFile(path.resolve("./assets/html/policy.html"))
+})
+
 export default router;
