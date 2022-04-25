@@ -39,4 +39,8 @@ router.get("/policy", (req, res) => {
   res.sendFile(path.resolve("./assets/html/policy.html"))
 })
 
+router.get("/contact", (req, res) => {
+  res.redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+})
+
 export default router;
