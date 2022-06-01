@@ -5,23 +5,14 @@ import path from "path"
 const router = Router();
 
 router.get("/ip", async (req, res) => {
-    const qs = req.query
-    const lines = [qs.a, qs.b, qs.c, qs.d, qs.e, qs.f, qs.g, qs.h, qs.i, qs.j, qs.k, qs.l, qs.m, qs.n, qs.o, qs.p, qs.q, qs.r, qs.s, qs.t, qs.u, qs.v, qs.w, qs.x, qs.y, qs.z].map((v) => v?.toString())
-
-    let cleanLines = lines.filter((v) => v != undefined)
-    if (cleanLines.length == 0) {
-        cleanLines = [req.ip]
-    }
-    
-    console.log(cleanLines)
-    //@ts-ignore
-    const buf = await renderIPImage(...cleanLines)
+    const t = req.query.text?.toString().split("\\n")
+    if (!t) return res.status(400).send("no text")
+    const buf = await renderIPImage(...t)
     res.setHeader("Content-Type", "image/png")
     res.send(buf)
 })
 
 router.get("/ip/:ip", async (req, res) => {
-
     const buf = await renderIPImage(req.params.ip)
     res.setHeader('Content-Type', 'image/png')
     res.send(buf)

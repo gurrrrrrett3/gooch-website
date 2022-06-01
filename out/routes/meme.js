@@ -17,15 +17,11 @@ const canvas_1 = __importDefault(require("canvas"));
 const path_1 = __importDefault(require("path"));
 const router = (0, express_1.Router)();
 router.get("/ip", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const qs = req.query;
-    const lines = [qs.a, qs.b, qs.c, qs.d, qs.e, qs.f, qs.g, qs.h, qs.i, qs.j, qs.k, qs.l, qs.m, qs.n, qs.o, qs.p, qs.q, qs.r, qs.s, qs.t, qs.u, qs.v, qs.w, qs.x, qs.y, qs.z].map((v) => v === null || v === void 0 ? void 0 : v.toString());
-    let cleanLines = lines.filter((v) => v != undefined);
-    if (cleanLines.length == 0) {
-        cleanLines = [req.ip];
-    }
-    console.log(cleanLines);
-    //@ts-ignore
-    const buf = yield renderIPImage(...cleanLines);
+    var _a;
+    const t = (_a = req.query.text) === null || _a === void 0 ? void 0 : _a.toString().split("\\n");
+    if (!t)
+        return res.status(400).send("no text");
+    const buf = yield renderIPImage(...t);
     res.setHeader("Content-Type", "image/png");
     res.send(buf);
 }));
