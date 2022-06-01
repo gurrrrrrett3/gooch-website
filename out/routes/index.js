@@ -11,6 +11,7 @@ const sfb_1 = __importDefault(require("./sfb"));
 const api_1 = __importDefault(require("./api"));
 const user_1 = __importDefault(require("./user"));
 const qr_1 = __importDefault(require("./qr"));
+const meme_1 = __importDefault(require("./meme"));
 let router = (0, express_1.Router)();
 router.use("/assets", assets_1.default);
 router.use("/plethora", plethora_1.default);
@@ -18,6 +19,7 @@ router.use("/sfb", sfb_1.default);
 router.use("/api", api_1.default);
 router.use("/user", user_1.default);
 router.use("/qr", qr_1.default);
+router.use("/meme", meme_1.default);
 router.get("/", (req, res) => {
     res.sendFile(path_1.default.resolve("./assets/html/index.html"));
 });

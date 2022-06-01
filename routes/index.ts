@@ -7,6 +7,7 @@ import sfbRouter from "./sfb";
 import apiRouter from "./api";
 import userRouter from "./user";
 import qrRouter from "./qr";
+import memeRouter from "./meme";
 
 let router = Router();
 
@@ -16,6 +17,7 @@ router.use("/sfb", sfbRouter);
 router.use("/api", apiRouter);
 router.use("/user", userRouter);
 router.use("/qr", qrRouter);
+router.use("/meme", memeRouter);
 
 router.get("/", (req, res) => {
   res.sendFile(path.resolve("./assets/html/index.html"));
