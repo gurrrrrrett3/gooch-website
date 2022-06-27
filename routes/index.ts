@@ -45,8 +45,8 @@ router.get("/contact", (req, res) => {
   res.redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
 })
 
-router.get("/url/6ffde4", (req, res) => {
-  res.redirect("https://stopify.co/1KW1R7")
+router.get("/colebirthday", (req, res) => {
+  res.sendFile(path.resolve("./assets/html/colebirthday.html"))
 })
 
 export default router;
