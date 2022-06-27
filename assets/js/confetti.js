@@ -121,5 +121,12 @@ function makeSpawners() {
   spawners.push(new ConfettiSpawner((canvas.width / 4) * 3, canvas.height - 10));
 }
 
+window.addEventListener("mousemove", (e) => {
+    let p = new Particle(e.clientX, e.clientY)
+    p.setVelocity((Math.random() - 0.5) * g.sx, Math.random() * g.sy / 4);
+    particles.push(p);
+    
+})
+
 resizeCanvas();
 render();
