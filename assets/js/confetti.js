@@ -18,6 +18,13 @@ var spawners = []
 
 var globalRadius = 3
 
+var g = {
+xvm: 0.995,
+yvm: 0.1,
+sx: 2,
+sy: -10
+}
+
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;   
@@ -63,8 +70,8 @@ class Particle {
             particles.splice(particles.indexOf(this), 1);
         }
 
-        this.xv *= 0.995;
-        this.yv += 0.1;
+        this.xv *= g.xvm;
+        this.yv += g.yvm;
     }
 
 }
@@ -82,8 +89,8 @@ class ConfettiSpawner {
         let particle = new Particle(this.x, this.y);
 
         particle.setVelocity(
-            (Math.random() - 0.5) * 2,
-            Math.random() * -10
+            (Math.random() - 0.5) * g.sx,
+            Math.random() * g.sy
         );
 
         particles.push(particle);
