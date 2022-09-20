@@ -49,4 +49,8 @@ router.get("/colebirthday", (req, res) => {
   res.sendFile(path.resolve("./assets/html/colebirthday.html"))
 })
 
+router.get("/ou", (req, res) => {
+  res.sendFile(path.resolve("./assets/html/ou.html"))
+})
+
 export default router;

@@ -61,10 +61,6 @@ class Particle {
     this.x += this.xv;
     this.y += this.yv;
 
-    if (this.x < 0 || this.x > canvas.width) {
-      this.xv *= -1;
-    }
-
     if (this.y > canvas.height || this.x < 0 || this.x > canvas.width) {
       //remove particle
       particles.splice(particles.indexOf(this), 1);

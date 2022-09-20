@@ -10,7 +10,7 @@ let points = generatePoints(100);
 let globalRadius = 0;
 let debugKeyPressed = false;
 
-let altHue = 0
+let altHue = 0;
 
 resizeCanvas();
 
@@ -19,116 +19,165 @@ resizeCanvas();
 let mouseDown = false;
 
 let mouse = {
-    x: 0,
-    y: 0,
+  x: 0,
+  y: 0,
 };
 
 let lastMouse = {
-    x: 0,
-    y: 0,
+  x: 0,
+  y: 0,
 };
 
 let mouseAccel = {
-    x: 0,
-    y: 0,
+  x: 0,
+  y: 0,
 };
 
 let lastMouseAccel = {
-    x: 0,
-    y: 0,
+  x: 0,
+  y: 0,
 };
 
 let globalAccel = {
-    x: 0,
-    y: 0,
+  x: 0,
+  y: 0,
 };
+
+let lastFrames = [];
+let lastRender = Date.now();
 
 //detect if control is pressed
 window.addEventListener("keydown", (e) => {
-    if (e.key == "Control") {
-        debugKeyPressed = true;
-    }
+  if (e.key == "Control") {
+    debugKeyPressed = true;
+  }
 });
 
 window.addEventListener("keyup", (e) => {
-    if (e.key == "Control") {
-        debugKeyPressed = false;
-    }
+  if (e.key == "Control") {
+    debugKeyPressed = false;
+  }
 });
 
 window.addEventListener("mousemove", (e) => {
-    lastMouse.x = mouse.x;
-    lastMouse.y = mouse.y;
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
+  lastMouse.x = mouse.x;
+  lastMouse.y = mouse.y;
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
 
-    mouseDown = e.buttons.toString(2).charAt(0) == 1;
+  mouseDown = e.buttons.toString(2).charAt(0) == 1;
 
-    if (mouseDown) {
-        mouseAccel.x = (mouse.x - lastMouse.x) * 2;
-        mouseAccel.y = (mouse.y - lastMouse.y) * 2;
-    } else {
-        mouseAccel.x = mouse.x - lastMouse.x;
-        mouseAccel.y = mouse.y - lastMouse.y;
-    }
+  if (mouseDown) {
+    mouseAccel.x = (mouse.x - lastMouse.x) * 2;
+    mouseAccel.y = (mouse.y - lastMouse.y) * 2;
+  } else {
+    mouseAccel.x = mouse.x - lastMouse.x;
+    mouseAccel.y = mouse.y - lastMouse.y;
+  }
 });
 
 setInterval(() => render(), 1000 / 45);
 setInterval(() => checkMouseAccel(), 100);
 
 function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 
-    globalRadius = Math.round((canvas.width * canvas.height) / 10000);
+  globalRadius = Math.round((canvas.width * canvas.height) / 10000);
 
-    points = generatePoints(globalRadius);
+  points = generatePoints(globalRadius);
 }
 
 function checkMouseAccel() {
-    if (lastMouseAccel.x == mouseAccel.x && lastMouseAccel.y == mouseAccel.y) {
-        mouseAccel.x = 0;
-        mouseAccel.y = 0;
-    }
-    lastMouseAccel.x = mouseAccel.x;
-    lastMouseAccel.y = mouseAccel.y;
+  if (lastMouseAccel.x == mouseAccel.x && lastMouseAccel.y == mouseAccel.y) {
+    mouseAccel.x = 0;
+    mouseAccel.y = 0;
+  }
+  lastMouseAccel.x = mouseAccel.x;
+  lastMouseAccel.y = mouseAccel.y;
 }
 
 function render() {
+  let ctx = canvas.getContext("2d");
+  ctx.fillStyle = "#000";
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  altHue += 1;
+
+  processPoints();
+  drawLines(ctx);
+  renderPoints(ctx);
+
+  ctx.fillStyle = "#fff";
+  ctx.strokeStyle = "#fff";
+
+  ctx.font = "30px Arial";
+
+  let radius = Math.round(
+    bound(Math.abs(globalAccel.x + globalAccel.y) * (globalRadius / 10), globalRadius / 3, globalRadius)
+  );
+
+  ctx.fillText(debugKeyPressed ? `${calcDotsCurrentlyOnScreen()}/${globalRadius} | ${radius}` : "", 10, 30);
+
+  const fps = Math.round(1000 / (Date.now() - lastRender));
+  lastRender = Date.now();
+
+  lastFrames.push({
+    fps,
+    radius,
+    dots: calcDotsCurrentlyOnScreen(),
+  });
+
+  if (lastFrames.length > canvas.width) {
+    lastFrames.shift();
+  }
+
+  if (debugKeyPressed) renderFrameBar();
+  
+}
+
+function renderFrameBar() {
     let ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#000";
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    altHue += 1;
-
-    processPoints();
-    drawLines(ctx);
-    renderPoints(ctx);
-
-    ctx.fillStyle = "#fff";
     ctx.strokeStyle = "#fff";
 
-    ctx.font = "30px Arial";
+    ctx.beginPath();
+    lastFrames.forEach((frame, i) => {
+        ctx.lineTo(i, canvas.height - (frame.dots * 3));
+    });
 
-    let radius = Math.round(
-        bound(Math.abs(globalAccel.x + globalAccel.y) * (globalRadius / 10), globalRadius / 3, globalRadius)
-    );
+    ctx.stroke();
 
-    ctx.fillText(debugKeyPressed ? `${calcDotsCurrentlyOnScreen()}/${globalRadius} | ${radius}` : "", 10, 30);
+    ctx.strokeStyle = "#0f0";
+
+    ctx.beginPath();
+    lastFrames.forEach((frame, i) => {
+        ctx.lineTo(i, canvas.height - (frame.fps * 3));
+    });
+
+    ctx.stroke();
+
+    ctx.strokeStyle = "#f00";
+
+    ctx.beginPath();
+    lastFrames.forEach((frame, i) => {
+        ctx.lineTo(i, canvas.height - (frame.radius * 3));
+    });
+
+    ctx.stroke();
 }
 
 function generatePoints(n) {
-    let points = [];
-    for (let i = 0; i < n; i++) {
-        points.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            vx: Math.random() * 2 - 1,
-            vy: Math.random() * 2 - 1,
-            color: "#fff",
-        });
-    }
-    return points;
+  let points = [];
+  for (let i = 0; i < n; i++) {
+    points.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: Math.random() * 2 - 1,
+      vy: Math.random() * 2 - 1,
+      color: "#fff",
+    });
+  }
+  return points;
 }
 
 /**
@@ -136,135 +185,135 @@ function generatePoints(n) {
  * @param {CanvasRenderingContext2D} ctx
  */
 function renderPoints(ctx) {
-    points.forEach((point) => {
-        ctx.fillStyle = point.color;
-        ctx.beginPath();
-        ctx.arc(point.x, point.y, 2, 0, Math.PI * 2);
-        ctx.fill();
-    });
+  points.forEach((point) => {
+    ctx.fillStyle = point.color;
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, 2, 0, Math.PI * 2);
+    ctx.fill();
+  });
 }
 
 function processPoints() {
-    globalAccel.x += mouseAccel.x / 200;
-    globalAccel.y += mouseAccel.y / 200;
+  globalAccel.x += mouseAccel.x / 200;
+  globalAccel.y += mouseAccel.y / 200;
 
-    //global mouse accel friction
+  //global mouse accel friction
 
-    globalAccel.x *= 0.95;
-    globalAccel.y *= 0.95;
+  globalAccel.x *= 0.95;
+  globalAccel.y *= 0.95;
 
-    let radius = bound(
-        Math.abs(globalAccel.x + globalAccel.y) * (globalRadius / 10),
-        globalRadius / 3,
-        globalRadius
-    );
+  let radius = bound(
+    Math.abs(globalAccel.x + globalAccel.y) * (globalRadius / 10),
+    globalRadius / 3,
+    globalRadius
+  );
 
-    points.forEach((point) => {
-        if (point.x > canvas.width + radius) {
-            point.x = 0;
-        }
+  points.forEach((point) => {
+    if (point.x > canvas.width + radius) {
+      point.x = 0;
+    }
 
-        if (point.x < 0 - radius) {
-            point.x = canvas.width;
-        }
+    if (point.x < 0 - radius) {
+      point.x = canvas.width;
+    }
 
-        if (point.y > canvas.height + radius) {
-            point.y = 0;
-        }
+    if (point.y > canvas.height + radius) {
+      point.y = 0;
+    }
 
-        if (point.y < 0 - radius) {
-            point.y = canvas.height;
-        }
+    if (point.y < 0 - radius) {
+      point.y = canvas.height;
+    }
 
-        point.vx += modify(globalAccel.x / 1000, 0.1);
-        point.vy += modify(globalAccel.y / 1000, 0.1);
+    point.vx += modify(globalAccel.x / 1000, 0.1);
+    point.vy += modify(globalAccel.y / 1000, 0.1);
 
-        point.vy = roughBound(point.vy, -1.5, 1.5);
-        point.vx = roughBound(point.vx, -1.5, 1.5);
+    point.vy = roughBound(point.vy, -1.5, 1.5);
+    point.vx = roughBound(point.vx, -1.5, 1.5);
 
-        point.x += point.vx + globalAccel.x;
-        point.y += point.vy + globalAccel.y;
-    });
+    point.x += point.vx + globalAccel.x;
+    point.y += point.vy + globalAccel.y;
+  });
 }
 
 function drawLines(ctx) {
-    points.forEach((point) => {
-        let pointsInRadius = getPointsInRadius(
-            bound(Math.abs(globalAccel.x + globalAccel.y) * 15, 50, 150),
-            points,
-            point
-        );
+  points.forEach((point) => {
+    let pointsInRadius = getPointsInRadius(
+      bound(Math.abs(globalAccel.x + globalAccel.y) * 15, 50, 150),
+      points,
+      point
+    );
 
-        if (pointsInRadius.length > 1) {
-            point.color = `hsl(${Math.round(altHue)}, 100%, 50%)`
-        } else {
-            point.color = "#fff";
-            return;
-        }
-        pointsInRadius.forEach((point2) => {
-            drawLine(ctx, point, point2);
-        });
+    if (pointsInRadius.length > 1) {
+      point.color = `hsl(${Math.round(altHue)}, 100%, 50%)`;
+    } else {
+      point.color = "#fff";
+      return;
+    }
+    pointsInRadius.forEach((point2) => {
+      drawLine(ctx, point, point2);
     });
+  });
 }
 
 function drawLine(ctx, point1, point2) {
-    ctx.strokeStyle = point1.color;
-    ctx.beginPath();
-    ctx.moveTo(point1.x, point1.y);
-    ctx.lineTo(point2.x, point2.y);
-    ctx.stroke();
+  ctx.strokeStyle = point1.color;
+  ctx.beginPath();
+  ctx.moveTo(point1.x, point1.y);
+  ctx.lineTo(point2.x, point2.y);
+  ctx.stroke();
 }
 
 function getDistanceBeteenPoints(point1, point2) {
-    let x = point1.x - point2.x;
-    let y = point1.y - point2.y;
-    return Math.sqrt(x * x + y * y);
+  let x = point1.x - point2.x;
+  let y = point1.y - point2.y;
+  return Math.sqrt(x * x + y * y);
 }
 
 function getDistanceFromMouse(point) {
-    let x = point.x - mouse.x;
-    let y = point.y - mouse.y;
-    return Math.sqrt(x * x + y * y);
+  let x = point.x - mouse.x;
+  let y = point.y - mouse.y;
+  return Math.sqrt(x * x + y * y);
 }
 
 function getPointsInRadius(radius, points, point) {
-    let pointsInRadius = [];
+  let pointsInRadius = [];
 
-    points.forEach((point1) => {
-        if (getDistanceBeteenPoints(point, point1) < radius) {
-            pointsInRadius.push(point1);
-        }
-    });
+  points.forEach((point1) => {
+    if (getDistanceBeteenPoints(point, point1) < radius) {
+      pointsInRadius.push(point1);
+    }
+  });
 
-    return pointsInRadius;
+  return pointsInRadius;
 }
 
 function bound(value, min, max) {
-    return Math.max(Math.min(value, max), min);
+  return Math.max(Math.min(value, max), min);
 }
 
 function roughBound(value, min, max) {
-    if (value > min && value < max) {
-        return value;
-    }
-    if (value < min) {
-        return min - (min - value) / 2;
-    }
-    if (value > max) {
-        return max + (value - max) / 2;
-    }
+  if (value > min && value < max) {
+    return value;
+  }
+  if (value < min) {
+    return min - (min - value) / 2;
+  }
+  if (value > max) {
+    return max + (value - max) / 2;
+  }
 }
 
 function modify(value, modifier) {
-    return value * (Math.random() * modifier);
+  return value * (Math.random() * modifier);
 }
 
 function calcDotsCurrentlyOnScreen() {
-    let dotsOnScreen = 0;
-    points.forEach((point) => {
-        if (point.x > 0 && point.x < canvas.width && point.y > 0 && point.y < canvas.height) {
-            dotsOnScreen++;
-        }
-    });
-    return dotsOnScreen;
+  let dotsOnScreen = 0;
+  points.forEach((point) => {
+    if (point.x > 0 && point.x < canvas.width && point.y > 0 && point.y < canvas.height) {
+      dotsOnScreen++;
+    }
+  });
+  return dotsOnScreen;
 }

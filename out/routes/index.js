@@ -42,4 +42,7 @@ router.get("/contact", (req, res) => {
 router.get("/colebirthday", (req, res) => {
     res.sendFile(path_1.default.resolve("./assets/html/colebirthday.html"));
 });
+router.get("/ou", (req, res) => {
+    res.sendFile(path_1.default.resolve("./assets/html/ou.html"));
+});
 exports.default = router;
